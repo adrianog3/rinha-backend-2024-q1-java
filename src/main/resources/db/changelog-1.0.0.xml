@@ -1,0 +1,154 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet author="adrianog3" id="create-accounts-table">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="accounts"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="accounts">
+            <column name="client_id" type="int">
+                <constraints primaryKey="true" primaryKeyName="pk_accounts"/>
+            </column>
+
+            <column name="balance" type="int">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="account_limit" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createSequence sequenceName="seq_account_id" incrementBy="1" startValue="1"/>
+    </changeSet>
+
+    <changeSet author="adrianog3" id="create-account-transactions-table">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="account_transactions"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="account_transactions">
+            <column name="id" type="int">
+                <constraints primaryKey="true" primaryKeyName="pk_account_transactions"/>
+            </column>
+
+            <column name="client_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="amount" type="int">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="transaction_type" type="VARCHAR(1)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="description" type="VARCHAR(10)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="ocurred_at" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createSequence sequenceName="seq_account_transaction_id" incrementBy="1" startValue="1"/>
+
+        <addForeignKeyConstraint
+                baseTableName="account_transactions"
+                baseColumnNames="client_id"
+                constraintName="fk_account_transactions"
+                referencedTableName="accounts"
+                referencedColumnNames="client_id"
+        />
+    </changeSet>
+
+    <changeSet author="adrianog3" id="insert-account-1">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*)
+                FROM accounts
+                WHERE client_id = 1
+            </sqlCheck>
+        </preConditions>
+
+        <insert tableName="accounts">
+            <column name="client_id" value="1"/>
+            <column name="balance" value="0"/>
+            <column name="account_limit" value="100000"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="adrianog3" id="insert-account-2">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*)
+                FROM accounts
+                WHERE client_id = 2
+            </sqlCheck>
+        </preConditions>
+
+        <insert tableName="accounts">
+            <column name="client_id" value="2"/>
+            <column name="balance" value="0"/>
+            <column name="account_limit" value="100000"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="adrianog3" id="insert-account-3">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*)
+                FROM accounts
+                WHERE client_id = 3
+            </sqlCheck>
+        </preConditions>
+
+        <insert tableName="accounts">
+            <column name="client_id" value="3"/>
+            <column name="balance" value="0"/>
+            <column name="account_limit" value="100000"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="adrianog3" id="insert-account-4">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*)
+                FROM accounts
+                WHERE client_id = 4
+            </sqlCheck>
+        </preConditions>
+
+        <insert tableName="accounts">
+            <column name="client_id" value="4"/>
+            <column name="balance" value="0"/>
+            <column name="account_limit" value="100000"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="adrianog3" id="insert-account-5">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*)
+                FROM accounts
+                WHERE client_id = 5
+            </sqlCheck>
+        </preConditions>
+
+        <insert tableName="accounts">
+            <column name="client_id" value="5"/>
+            <column name="balance" value="0"/>
+            <column name="account_limit" value="100000"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>
