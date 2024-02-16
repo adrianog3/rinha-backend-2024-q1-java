@@ -99,7 +99,7 @@
         <insert tableName="accounts">
             <column name="client_id" value="2"/>
             <column name="balance" value="0"/>
-            <column name="account_limit" value="100000"/>
+            <column name="account_limit" value="80000"/>
         </insert>
     </changeSet>
 
@@ -115,7 +115,7 @@
         <insert tableName="accounts">
             <column name="client_id" value="3"/>
             <column name="balance" value="0"/>
-            <column name="account_limit" value="100000"/>
+            <column name="account_limit" value="1000000"/>
         </insert>
     </changeSet>
 
@@ -131,7 +131,7 @@
         <insert tableName="accounts">
             <column name="client_id" value="4"/>
             <column name="balance" value="0"/>
-            <column name="account_limit" value="100000"/>
+            <column name="account_limit" value="10000000"/>
         </insert>
     </changeSet>
 
@@ -147,7 +147,7 @@
         <insert tableName="accounts">
             <column name="client_id" value="5"/>
             <column name="balance" value="0"/>
-            <column name="account_limit" value="100000"/>
+            <column name="account_limit" value="500000"/>
         </insert>
     </changeSet>
 
