@@ -5,13 +5,13 @@ import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
-import org.acme.dto.NewTransactionDto;
-import org.acme.dto.NewBalanceDto;
+import org.acme.dto.*;
 import org.acme.entity.Account;
 import org.acme.entity.AccountTransaction;
 import org.acme.exception.BalanceException;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @ApplicationScoped
 public class AccountTransactionService {
@@ -51,6 +51,32 @@ public class AccountTransactionService {
 		em.persist(account);
 
 		return new NewBalanceDto(account.getLimit(), newBalance);
+	}
+
+	public AccountStatementDto getAccountStatement(int clientId) {
+		Account account = em.find(Account.class, clientId);
+
+		if (account == null) {
+			throw new EntityNotFoundException(String.format("Cliente com id %s não encontrado", clientId));
+		}
+
+		String query = "SELECT t FROM AccountTransaction t WHERE t.account.clientId = ?1";
+
+		List<AccountTransactionDto> transactions = em.createQuery(query, AccountTransaction.class)
+			.setParameter(1, clientId)
+			.setMaxResults(10)
+			.getResultStream()
+			.map(accountTransaction -> new AccountTransactionDto(
+				accountTransaction.getAmount(),
+				accountTransaction.getTransactionType(),
+				accountTransaction.getDescription(),
+				accountTransaction.getOccurredAt()
+			))
+			.toList();
+
+		BalanceDto balanceDto = new BalanceDto(account.getBalance(), LocalDateTime.now(), account.getLimit());
+
+		return new AccountStatementDto(balanceDto, transactions);
 	}
 
 }

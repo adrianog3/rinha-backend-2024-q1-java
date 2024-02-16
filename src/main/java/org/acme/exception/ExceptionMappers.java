@@ -23,7 +23,7 @@ public class ExceptionMappers {
 	}
 
 	@ServerExceptionMapper(value = {BalanceException.class})
-	public Response handleBadRequest(Exception e) {
+	public Response handleBalanceException(Exception e) {
 		Map<String, Object> message = Map.of(
 			"message", e.getMessage(),
 			"timestamp", LocalDateTime.now()
