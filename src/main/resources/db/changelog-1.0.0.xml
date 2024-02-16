@@ -151,4 +151,16 @@
         </insert>
     </changeSet>
 
+    <changeSet author="adrianog3" id="create-index-transaction-ocurred-at">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists tableName="account_transactions" columnNames="ocurred_at"/>
+            </not>
+        </preConditions>
+
+        <createIndex tableName="account_transactions" indexName="idx_transaction_ocurred_at">
+            <column name="ocurred_at"/>
+        </createIndex>
+    </changeSet>
+
 </databaseChangeLog>
