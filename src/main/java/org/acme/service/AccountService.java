@@ -65,7 +65,7 @@ public class AccountService {
 			throw new EntityNotFoundException(String.format("Cliente com id %s não encontrado", clientId));
 		}
 
-		String query = "SELECT t FROM AccountTransaction t WHERE t.account.clientId = ?1";
+		String query = "SELECT t FROM AccountTransaction t WHERE t.account.clientId = ?1 ORDER BY t.occurredAt DESC";
 
 		List<AccountTransactionDto> transactions = em.createQuery(query, AccountTransaction.class)
 			.setParameter(1, clientId)
