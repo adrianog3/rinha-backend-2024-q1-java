@@ -21,7 +21,7 @@ public class AccountTransactionController {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response performTransaction(@PathParam("clientId") int clientId, @Valid NewTransactionDto newTransactionDto) {
-		NewBalanceDto newBalanceDto = accountTransactionService.performTransaction(clientId, newTransactionDto);
+		NewBalanceDto newBalanceDto = accountTransactionService.processTransaction(clientId, newTransactionDto);
 		return Response.ok(newBalanceDto).build();
 	}
 
