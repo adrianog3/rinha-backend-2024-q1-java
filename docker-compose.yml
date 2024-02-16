@@ -1,11 +1,64 @@
 services:
-  postgres:
+  api01: &api
+    image: rinha-backend-2024-q1:latest
+    hostname: api01
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: rinha
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+    ports:
+      - "8080:8080"
+    networks:
+      - rinha-de-backend
+    depends_on:
+      - db
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: "150MB"
+
+  api02:
+    <<: *api
+    hostname: api02
+    ports:
+      - "8081:8080"
+
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./docker/nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "9999:9999"
+    networks:
+      - rinha-de-backend
+    depends_on:
+      - api01
+      - api02
+    deploy:
+      resources:
+        limits:
+          cpus: "0.2"
+          memory: "50MB"
+
+  db:
+    hostname: db
     image: postgres:16.2-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: rinha
     ports:
       - "5432:5432"
-    environment:
-      POSTGRES_USER: "postgres"
-      POSTGRES_PASSWORD: "postgres"
-      POSTGRES_DB: "rinha"
-    volumes:
-      - "./docker/init.sql:/docker-entrypoint-initdb.d/init.sql"
+    networks:
+      - rinha-de-backend
+    deploy:
+      resources:
+        limits:
+          cpus: "0.8"
+          memory: "200MB"
+
+networks:
+  rinha-de-backend:
