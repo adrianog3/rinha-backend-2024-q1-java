@@ -15,12 +15,12 @@ import java.util.List;
 
 @ApplicationScoped
 @RequiredArgsConstructor
-public class AccountTransactionService {
+public class AccountService {
 
 	private final EntityManager em;
 
 	@Transactional
-	public NewBalanceDto processTransaction(int clientId, NewTransactionDto transactionDto) {
+	public NewBalanceDto performTransaction(int clientId, NewTransactionDto transactionDto) {
 		Account account = em.find(Account.class, clientId);
 
 		if (account == null) {
@@ -49,7 +49,7 @@ public class AccountTransactionService {
 		return new NewBalanceDto(account.getLimit(), newBalance);
 	}
 
-	public AccountStatementDto getAccountStatement(int clientId) {
+	public AccountStatementDto getStatement(int clientId) {
 		Account account = em.find(Account.class, clientId);
 
 		if (account == null) {
