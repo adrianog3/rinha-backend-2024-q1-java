@@ -19,7 +19,7 @@ services:
       resources:
         limits:
           cpus: "0.25"
-          memory: "150MB"
+          memory: "185MB"
 
   api02:
     <<: *api
@@ -42,7 +42,7 @@ services:
       resources:
         limits:
           cpus: "0.2"
-          memory: "50MB"
+          memory: "30MB"
 
   db:
     hostname: db
@@ -59,7 +59,7 @@ services:
       resources:
         limits:
           cpus: "0.8"
-          memory: "200MB"
+          memory: "150MB"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready"]
       interval: 1s
