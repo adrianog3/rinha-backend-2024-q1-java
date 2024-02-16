@@ -3,6 +3,7 @@ package org.acme.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.acme.exception.BalanceException;
 
 @Entity
 @Getter
@@ -21,5 +22,16 @@ public class Account {
 
 	@Column(name = "account_limit")
 	private Integer limit;
+
+	public void setBalance(Integer newBalance) {
+		if ((newBalance + limit) < 0) {
+			throw new BalanceException(String.format(
+				"O saldo de %s ultrapassa o limite de %s centavos",
+				newBalance, limit
+			));
+		}
+
+		this.balance = newBalance;
+	}
 
 }

@@ -3,12 +3,12 @@ package org.acme.service;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.LockModeType;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.acme.dto.*;
 import org.acme.entity.Account;
 import org.acme.entity.AccountTransaction;
-import org.acme.exception.BalanceException;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -20,33 +20,42 @@ public class AccountService {
 	private final EntityManager em;
 
 	@Transactional
-	public NewBalanceDto performTransaction(int clientId, NewTransactionDto transactionDto) {
-		Account account = em.find(Account.class, clientId);
+	public NewBalanceDto performTransaction(int clientId, NewTransactionDto newTransactionDto) {
+		saveTransaction(clientId, newTransactionDto);
+
+		return updateBalance(clientId, newTransactionDto);
+	}
+
+	private void saveTransaction(int clientId, NewTransactionDto newTransactionDto) {
+		Account account = new Account();
+		account.setClientId(clientId);
+
+		AccountTransaction accountTransaction = new AccountTransaction();
+		accountTransaction.setAmount(newTransactionDto.amount());
+		accountTransaction.setTransactionType(newTransactionDto.transactionType());
+		accountTransaction.setDescription(newTransactionDto.description());
+		accountTransaction.setAccount(account);
+		accountTransaction.setOccurredAt(LocalDateTime.now());
+
+		em.persist(accountTransaction);
+	}
+
+	private NewBalanceDto updateBalance(int clientId, NewTransactionDto newTransactionDto) {
+		Account account = em.find(Account.class, clientId, LockModeType.PESSIMISTIC_WRITE);
 
 		if (account == null) {
 			throw new EntityNotFoundException(String.format("Cliente com id %s não encontrado", clientId));
 		}
 
-		int newBalance = account.getBalance() - transactionDto.amount();
-		int diff = account.getLimit() - Math.abs(newBalance);
+		account.setBalance(
+			newTransactionDto.transactionType().equals("c")
+				? account.getBalance() + newTransactionDto.amount()
+				: account.getBalance() - newTransactionDto.amount()
+		);
 
-		if (diff < 0) {
-			throw new BalanceException(String.format("A transação ultrapassou o limite de %s centavos", account.getLimit()));
-		}
-
-		AccountTransaction accountTransaction = new AccountTransaction();
-		accountTransaction.setAmount(transactionDto.amount());
-		accountTransaction.setTransactionType(transactionDto.transactionType());
-		accountTransaction.setDescription(transactionDto.description());
-		accountTransaction.setAccount(account);
-		accountTransaction.setOccurredAt(LocalDateTime.now());
-
-		account.setBalance(newBalance);
-
-		em.persist(accountTransaction);
 		em.persist(account);
 
-		return new NewBalanceDto(account.getLimit(), newBalance);
+		return new NewBalanceDto(account.getLimit(), account.getBalance());
 	}
 
 	public AccountStatementDto getStatement(int clientId) {
