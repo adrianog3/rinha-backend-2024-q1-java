@@ -13,7 +13,8 @@ services:
     networks:
       - rinha-de-backend
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     deploy:
       resources:
         limits:
@@ -59,6 +60,11 @@ services:
         limits:
           cpus: "0.8"
           memory: "200MB"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 1s
+      timeout: 5s
+      retries: 30
 
 networks:
   rinha-de-backend:

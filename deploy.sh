@@ -1,7 +1,17 @@
-docker-compose down -v
+#!/usr/bin/env bash
 
-./mvnw package -Dmaven.test.skip=true
+function jvmBuild() {
+  ./mvnw package -Dmaven.test.skip=true
 
-docker build -t rinha-backend-2024-q1:latest -f docker/Dockerfile.jvm .
+  docker build -t rinha-backend-2024-q1:latest -f docker/Dockerfile.jvm .
+}
 
-docker-compose up -d
+function nativeBuild() {
+  ./mvnw clean package -Pnative -Dquarkus.native.container-build=true
+
+  docker build -t rinha-backend-2024-q1:latest -f docker/Dockerfile.native .
+}
+
+docker-compose down -v \
+  && nativeBuild \
+  && docker-compose up -d
