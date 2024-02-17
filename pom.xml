@@ -5,7 +5,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.acme</groupId>
-    <artifactId>rinha-backend-quarkus</artifactId>
+    <artifactId>crebitos</artifactId>
     <version>1.0.0</version>
 
     <properties>
