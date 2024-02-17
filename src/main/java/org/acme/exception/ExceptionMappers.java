@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.core.Response;
 import org.jboss.resteasy.reactive.server.ServerExceptionMapper;
@@ -23,12 +25,22 @@ public class ExceptionMappers {
 	}
 
 	@ServerExceptionMapper
+	public Response handleConstraintViolation(ConstraintViolationException e) {
+		String message = e.getConstraintViolations().stream()
+			.findFirst()
+			.map(ConstraintViolation::getMessage)
+			.orElse(e.getMessage());
+
+		return buildResponse(message, UNPROCESSABLE_ENTITY);
+	}
+
+	@ServerExceptionMapper
 	public Response handleBalanceException(BalanceException e) {
 		return buildResponse(e.getMessage(), UNPROCESSABLE_ENTITY);
 	}
 
 	@ServerExceptionMapper
-	public Response handleMismatchedInputException(MismatchedInputException e) {
+	public Response handleMismatchedInput(MismatchedInputException e) {
 		String fieldPath = e.getPath().stream()
 			.map(JsonMappingException.Reference::getFieldName)
 			.collect(Collectors.joining("."));
