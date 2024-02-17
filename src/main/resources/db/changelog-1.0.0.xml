@@ -159,7 +159,7 @@
         </preConditions>
 
         <createIndex tableName="account_transactions" indexName="idx_transaction_ocurred_at">
-            <column name="ocurred_at"/>
+            <column name="ocurred_at" descending="true"/>
         </createIndex>
     </changeSet>
 
