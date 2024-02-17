@@ -55,6 +55,8 @@ services:
       - "5432:5432"
     networks:
       - rinha-de-backend
+    volumes:
+      - ./docker/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
     deploy:
       resources:
         limits:
