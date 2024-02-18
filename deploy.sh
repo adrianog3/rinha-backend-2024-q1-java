@@ -14,4 +14,4 @@ function nativeBuild() {
 
 docker-compose down -v \
   && nativeBuild \
-  && docker-compose --project-name rinha up -d
+  && docker-compose up -d

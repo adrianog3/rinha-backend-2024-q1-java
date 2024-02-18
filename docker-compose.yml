@@ -1,17 +1,16 @@
 services:
   api01: &api
     image: rinha-backend-2024-q1:latest
+    container_name: rinha_api01
     hostname: api01
     environment:
-      DB_HOST: db
+      DB_HOST: localhost
       DB_PORT: 5432
       DB_NAME: rinha
       DB_USER: postgres
       DB_PASSWORD: postgres
-    ports:
-      - "8080:8080"
-    networks:
-      - rinha-de-backend
+      QUARKUS_HTTP_PORT: 8080
+    network_mode: "host"
     depends_on:
       db:
         condition: service_healthy
@@ -23,18 +22,17 @@ services:
 
   api02:
     <<: *api
+    container_name: rinha_api02
     hostname: api02
-    ports:
-      - "8081:8080"
+    environment:
+      QUARKUS_HTTP_PORT: 8081
 
   nginx:
-    image: nginx:latest
+    image: nginx:1.25.4-alpine
+    container_name: rinha_nginx
     volumes:
       - ./docker/nginx.conf:/etc/nginx/nginx.conf:ro
-    ports:
-      - "9999:9999"
-    networks:
-      - rinha-de-backend
+    network_mode: "host"
     depends_on:
       - api01
       - api02
@@ -46,15 +44,13 @@ services:
 
   db:
     hostname: db
+    container_name: rinha_db
     image: postgres:16.2-alpine
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: rinha
-    ports:
-      - "5432:5432"
-    networks:
-      - rinha-de-backend
+    network_mode: "host"
     volumes:
       - ./docker/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
     deploy:
@@ -67,6 +63,3 @@ services:
       interval: 1s
       timeout: 5s
       retries: 30
-
-networks:
-  rinha-de-backend:
