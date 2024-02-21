@@ -7,7 +7,7 @@ function jvmBuild() {
 }
 
 function nativeBuild() {
-  ./mvnw clean package -Pnative -Dquarkus.native.container-build=true
+  ./mvnw clean package -Dmaven.test.skip=true -Pnative -Dquarkus.native.container-build=true
 
   docker build -t rinha-backend-2024-q1:latest -f docker/Dockerfile.native .
 }
