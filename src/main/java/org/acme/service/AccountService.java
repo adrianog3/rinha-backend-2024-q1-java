@@ -21,9 +21,11 @@ public class AccountService {
 
 	@Transactional
 	public NewBalanceDto performTransaction(int clientId, NewTransactionDto newTransactionDto) {
+		NewBalanceDto newBalanceDto = updateBalance(clientId, newTransactionDto);
+
 		saveTransaction(clientId, newTransactionDto);
 
-		return updateBalance(clientId, newTransactionDto);
+		return newBalanceDto;
 	}
 
 	private void saveTransaction(int clientId, NewTransactionDto newTransactionDto) {
