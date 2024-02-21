@@ -1,6 +1,6 @@
 services:
   api01: &api
-    image: rinha-backend-2024-q1:latest
+    image: adrianog3/rinha-backend-2024-q1:latest
     container_name: rinha_api01
     hostname: api01
     environment:

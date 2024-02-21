@@ -14,6 +14,6 @@ public record AccountTransactionDto(
 	String description,
 	@JsonProperty("realizada_em")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'")
-	LocalDateTime ocurredAt
+	LocalDateTime occurredAt
 ) {
 }

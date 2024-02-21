@@ -44,7 +44,7 @@ public class AccountService {
 		Account account = em.find(Account.class, clientId, LockModeType.PESSIMISTIC_WRITE);
 
 		if (account == null) {
-			throw new EntityNotFoundException(String.format("Cliente com id %s não encontrado", clientId));
+			throw new EntityNotFoundException("Cliente não encontrado");
 		}
 
 		account.setBalance(
@@ -62,7 +62,7 @@ public class AccountService {
 		Account account = em.find(Account.class, clientId);
 
 		if (account == null) {
-			throw new EntityNotFoundException(String.format("Cliente com id %s não encontrado", clientId));
+			throw new EntityNotFoundException("Cliente não encontrado");
 		}
 
 		String query = "SELECT t FROM AccountTransaction t WHERE t.account.clientId = ?1 ORDER BY t.occurredAt DESC";

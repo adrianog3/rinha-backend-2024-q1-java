@@ -31,7 +31,7 @@ public class AccountTransaction {
 	@Column(name = "description", length = 10)
 	private String description;
 
-	@Column(name = "ocurred_at")
+	@Column(name = "occurred_at")
 	private LocalDateTime occurredAt;
 
 }

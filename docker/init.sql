@@ -10,13 +10,13 @@ CREATE TABLE account_transactions(
     amount           INTEGER     NOT NULL,
     transaction_type VARCHAR(1)  NOT NULL,
     description      VARCHAR(10) NOT NULL,
-    ocurred_at       TIMESTAMP   NOT NULL
+    occurred_at       TIMESTAMP   NOT NULL
 );
 
 CREATE SEQUENCE seq_account_id;
 CREATE SEQUENCE seq_account_transaction_id;
 
-CREATE INDEX idx_transaction_ocurred_at ON account_transactions (ocurred_at);
+CREATE INDEX idx_transaction_occurred_at ON account_transactions (occurred_at);
 
 INSERT INTO accounts(client_id, balance, account_limit) VALUES(1, 0, 100000);
 INSERT INTO accounts(client_id, balance, account_limit) VALUES(2, 0, 80000);
