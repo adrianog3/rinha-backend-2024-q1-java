@@ -7,6 +7,7 @@ Este repositório contém o código-fonte e toda a configuração necessária pa
 - [Java](https://www.java.com/en/)
 - [Quarkus](https://pt.quarkus.io/)
 - [PostgreSQL](https://www.postgresql.org/)
+- [Nginx](https://www.nginx.com/)
 
 ## Execução local
 
